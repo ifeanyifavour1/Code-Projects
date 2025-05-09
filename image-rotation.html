@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Rotation Project</title>
+    <link rel="stylesheet" href="style.css"> <!-- Optional CSS -->
+</head>
+<body>
+
+    <!-- Upload and Rotate Section -->
+    <section id="image-rotation-section">
+        <h2>Rotate Image</h2>
+
+        <!-- Upload Button -->
+        <label for="real-file" id="custom-label">Upload an image</label>
+        <input type="file" id="real-file" style="display: none;" />
+
+        <!-- Angle input -->
+        <label for="angle-input">Enter angle (in degrees):</label>
+        <input type="number" id="angle-input" placeholder="e.g. 90" />
+
+        <!-- Rotate button -->
+        <button id="rotate-btn">Click to Rotate</button>
+
+        <!-- Canvas to display image -->
+        <canvas id="myCanvas" width="500" height="500"></canvas>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="image-rotation.js"></script>
+
+</body>
+</html>
