@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Retouching Tool</title>
+  <link rel="stylesheet" href="retouching.css">
+</head>
+<body>
+  <h1>Image Retouching</h1>
+
+  <!-- Upload Image -->
+  <label for="upload" id="custom-label">Click to Upload Image</label>
+  <input type="file" id="upload" accept="image/*" style="display:none;">
+
+  <!-- Tool Selection -->
+  <div class="tools">
+    <button onclick="tool = 'clone'">Clone</button>
+    <button onclick="tool = 'blur'">Blur</button>
+    <button onclick="tool = 'spot'">Spot Remover</button>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="canvas"></canvas>
+
+  <script src="retouching.js"></script>
+</body>
+</html>

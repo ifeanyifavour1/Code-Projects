@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Rotation Project</title>
-    <link rel="stylesheet" href="style.css"> <!-- Optional CSS -->
+    <link rel="stylesheet" href="image-rotation.css">
 </head>
 <body>
-
     <!-- Upload and Rotate Section -->
     <section id="image-rotation-section">
         <h2>Rotate Image</h2>
 
-        <!-- Upload Button -->
+        <!-- Upload Button (will get glowing hover effect from CSS) -->
         <label for="real-file" id="custom-label">Upload an image</label>
-        <input type="file" id="real-file" style="display: none;" />
+        <input type="file" id="real-file" accept="image/*" style="display: none;">
 
         <!-- Angle input -->
         <label for="angle-input">Enter angle (in degrees):</label>
-        <input type="number" id="angle-input" placeholder="e.g. 90" />
+        <input type="number" id="angle-input" placeholder="e.g. 90">
 
-        <!-- Rotate button -->
+        <!-- Rotate button (will get glowing hover effect from CSS) -->
         <button id="rotate-btn">Click to Rotate</button>
 
-        <!-- Canvas to display image -->
+        <!-- Canvas to display image (will get border glow from CSS) -->
         <canvas id="myCanvas" width="500" height="500"></canvas>
     </section>
 
-    <!-- JavaScript -->
+    <!-- JavaScript - Keep your EXISTING code -->
     <script src="image-rotation.js"></script>
-
 </body>
 </html>

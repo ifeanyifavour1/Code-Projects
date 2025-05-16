@@ -29,17 +29,17 @@ input.addEventListener('change', function (event) {
 
 // Function to draw the image with the current rotation
 function drawImageRotated() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous image
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2); // Move to center
-    ctx.rotate(rotationAngle * Math.PI / 180); // Rotate in radians
-    ctx.drawImage(image, -image.width / 2, -image.height / 2); // Draw from center
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(rotationAngle * Math.PI / 180);
+    ctx.drawImage(image, -image.width / 2, -image.height / 2);
     ctx.restore();
 }
 
 // Handle button click to rotate
 rotateBtn.addEventListener('click', () => {
     const angle = parseInt(angleInput.value) || 0;
-    rotationAngle += angle;  // Increase rotation
-    drawImageRotated();  // Redraw image
+    rotationAngle += angle;
+    drawImageRotated();
 });

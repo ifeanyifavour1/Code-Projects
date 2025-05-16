@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #400000; /* Dark classy red */
+  text-align: center;
+  color: white;
+}
+
+#filters {
+  background-color: #1c1c2e;
+  padding: 30px;
+  border-radius: 15px;
+  width: 300px;
+  margin: 30px auto;
+  box-shadow: 0 0 25px #ff4da6;
+}
+
+#custom-label {
+  display: block;
+  padding: 15px 25px;
+  background-color: #3d2626;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  transition: all 0.4s ease;
+  border: 2px solid #4cc9f0;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 10px #4cc9f0;
+}
+
+#custom-label:hover {
+  background-color: black;
+  color: #4cc9f0;
+  transform: translateY(-3px);
+}
+
+.dropdown {
+  position: relative;
+  margin-top: 10px;
+}
+
+.dropdown-toggle {
+  padding: 12px;
+  background-color: #151527;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 12px #00ffff;
+  transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+  background-color: #000;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.dropdown-menu {
+  display: none;
+  margin-top: 10px;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #2a2a40;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background 0.3s;
+  box-shadow: 0 0 10px #66fcf1;
+}
+
+.dropdown-menu button:hover {
+  background-color: #00ffff;
+  color: black;
+}
+
+canvas {
+  margin-top: 30px;
+  border: 5px solid #00ffff;
+  box-shadow: 0 0 25px #00ffff;
+  border-radius: 15px;
+}

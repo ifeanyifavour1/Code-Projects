@@ -1,37 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Color Filter</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8">
+  <title>Image Filter App</title>
+  <link rel="stylesheet" href="color-filter.css">
 </head>
 <body>
-
-  <!-- Filter Selection Section -->
   <section id="filters">
-    <h3>Apply Filter</h3>
+    <label id="custom-label" for="real-file">↑ Upload Image</label>
+    <input type="file" id="real-file" accept="image/*" style="display:none" />
 
-    <label for="invert-filter">
-      Invert
-      <input type="checkbox" name="filter" value="invert" id="invert-filter"/>
-    </label><br/>
-
-    <label for="sepia-filter">
-      Sepia
-      <input type="checkbox" name="filter" value="sepia" id="sepia-filter"/>
-    </label><br/>
-
-    <label for="grayscale-filter">
-      Grayscale
-      <input type="checkbox" name="filter" value="grayscale" id="grayscale-filter"/>
-    </label><br/>
-
-    <button id="apply-filters">Apply Filters</button>
+    <div class="dropdown">
+      <div class="dropdown-toggle">Apply Filter ▼</div>
+      <div class="dropdown-menu">
+        <button onclick="applyFilter('grayscale')">Grayscale</button>
+        <button onclick="applyFilter('sepia')">Sepia</button>
+        <button onclick="applyFilter('invert')" > invert</button>
+      </div>
+    </div>
   </section>
 
-  <!-- Canvas to Display Image -->
-  <canvas id="image-canvas" width="500" height="500"></canvas>
+  <canvas id="myCanvas" width="400" height="400"></canvas>
 
+  <script src="color-filter.js"></script>
 </body>
 </html>
