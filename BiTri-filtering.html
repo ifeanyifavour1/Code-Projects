@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bilinear & Trilinear Filtering</title>
+  <link rel="stylesheet" href="BiTri-filtering.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>Bilinear & Trilinear Filtering</h1>
+
+    <div class="upload-section">
+      <label for="image-upload" class="btn-upload">Upload Image</label>
+      <input type="file" id="image-upload" accept="image/*" hidden />
+    </div>
+
+    <div class="flex-container">
+      <figure class="canvas-figure">
+        <figcaption class="canvas-label">Original Image (Pick Source Points)</figcaption>
+        <canvas id="original-canvas" width="400" height="300"></canvas>
+      </figure>
+
+      <figure class="canvas-figure">
+        <figcaption class="canvas-label">Result Image (Pick Destination Points)</figcaption>
+        <canvas id="result-canvas" width="400" height="300"></canvas>
+      </figure>
+    </div>
+
+    <div class="buttons-section">
+      <button id="btn-bilinear" class="btn-action">Apply Bilinear Filtering (Enlarge)</button>
+      <button id="btn-trilinear" class="btn-action">Apply Trilinear Filtering (Shrink)</button>
+    </div>
+  </div>
+
+</body>
+</html>

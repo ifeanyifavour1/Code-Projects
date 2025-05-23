@@ -1,0 +1,140 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #1e1e2f;
+  color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 900px;
+  width: 100%;
+  background: #2a2a3a;
+  border-radius: 12px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2.4rem;
+  color: #76b5c5;
+  margin-bottom: 30px;
+  text-align: center;
+  letter-spacing: 1.1px;
+  user-select: none;
+}
+
+.upload-section {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.btn-upload {
+  cursor: pointer;
+  background: #76b5c5;
+  color: #1e1e2f;
+  font-weight: 600;
+  padding: 12px 30px;
+  border-radius: 30px;
+  display: inline-block;
+  font-size: 1.1rem;
+  transition: background 0.3s ease;
+  user-select: none;
+}
+
+.btn-upload:hover {
+  background: #5a8ea3;
+}
+
+/* Container for the two figures with canvases */
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.canvas-figure {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas-label {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: #a0c8d8;
+  user-select: none;
+}
+
+canvas {
+  border: 3px solid #455a64;
+  border-radius: 8px;
+  background: #141423;
+  box-shadow: inset 0 0 10px rgba(118, 181, 197, 0.3);
+  cursor: crosshair;
+  max-width: 100%;
+  height: auto;
+  transition: border-color 0.3s ease;
+}
+
+canvas:hover {
+  border-color: #76b5c5;
+}
+
+.buttons-section {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  background: #f07f3f;
+  border: none;
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(240, 127, 63, 0.6);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  min-width: 220px;
+}
+
+.btn-action:hover {
+  background: #d06631;
+  box-shadow: 0 6px 20px rgba(208, 102, 49, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+  .flex-container {
+    flex-direction: column;
+    gap: 35px;
+  }
+
+  .canvas-figure {
+    flex: 1 1 100%;
+  }
+
+  .btn-action {
+    min-width: 100%;
+  }
+}
