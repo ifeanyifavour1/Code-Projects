@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsharp Mask</title>
+  <link rel="stylesheet" href="unsharp-masking.css">
+</head>
+<body>
+  <h3>Unsharp Masking</h3>
+
+  <div class="controls">
+    <!-- Upload Image -->
+    <label id="custom-label" for="real-file">Upload Image</label>
+    <input type="file" id="real-file" accept="image/*" style="display: none;">
+    <br><br>
+
+    <!-- Ratio Input -->
+    <input type="text" id="ratio" placeholder="Enter masking Ratio e.g. 1.5">
+    <button id="applyBtn">Apply</button>  
+
+    <!-- Canvas for Image Display -->
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+  </div>
+
+  <script src="unsharp-mask.js"></script>
+</body>
+</html>

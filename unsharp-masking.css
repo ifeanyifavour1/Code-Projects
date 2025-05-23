@@ -1,0 +1,78 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: linear-gradient(to left, #a1c4fd, #c2e9fb);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+h3 {
+  margin-top: 20px;
+  color: rgb(41, 137, 166);
+  font-size: 26px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid lightblue;
+  border-radius: 6px;
+  align-items: left;
+  outline: none;
+}
+
+button {
+  background: rgb(126, 126, 164);
+  color: white; 
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background: rgb(21, 35, 85);
+  transform: scale(1.05);
+  box-shadow: 0 0 10px cyan, 0 0 25px cyan;
+}
+
+#custom-label {
+  background: rgb(126, 126, 164);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgb(44, 44, 80), 0 0 20px rgb(44, 44, 90);
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#custom-label:hover {
+  background: rgb(21, 35, 85);
+  transform: scale(1.05);
+  box-shadow: 0 0 10px cyan, 0 0 25px cyan;
+}
+
+#myCanvas {
+  border: 2px solid rgb(41, 137, 166);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(41, 137, 166, 0.3);
+  max-width: 100%;
+  height: auto;
+}
