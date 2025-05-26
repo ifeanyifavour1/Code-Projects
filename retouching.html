@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image Retouching Tool</title>
-  <link rel="stylesheet" href="retouching.css">
+  <link rel="stylesheet" href="retouching.css" />
 </head>
 <body>
   <h1>Image Retouching</h1>
 
-  <!-- Upload Image -->
-  <label for="upload" id="custom-label">Click to Upload Image</label>
-  <input type="file" id="upload" accept="image/*" style="display:none;">
+  <!-- Upload -->
+  <label for="upload" id="custom-label">Tap to Upload Image</label>
+  <input type="file" id="upload" accept="image/*" hidden />
 
-  <!-- Tool Selection -->
+  <!-- Tools -->
   <div class="tools">
-    <button onclick="tool = 'clone'">Clone</button>
-    <button onclick="tool = 'blur'">Blur</button>
-    <button onclick="tool = 'spot'">Spot Remover</button>
+    <select id="tool-select">
+      <option value="" disabled selected> Choose Tool</option>
+      <option value="clone"> Clone</option>
+      <option value="blur"> Blur</option>
+      <option value="spot"> Spot Remover</option>
+    </select>
+
+    <input
+      type="number"
+      id="radius-input"
+      placeholder=" Choose Spot Size (1–50)"
+      min="1"
+      max="50"
+    />
   </div>
 
   <!-- Canvas -->
   <canvas id="canvas"></canvas>
+
+  <!-- Download -->
+  <button id="download-btn" class="download-btn">⬇️ Download Image</button>
 
   <script src="retouching.js"></script>
 </body>

@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Image Segmentation</title>
-    <link rel="stylesheet" href="Segment.css">
+  <meta charset="UTF-8">
+  <title>Image Segmentation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #333;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Image Segmentation</h1>
-    <a href="index.html">← Back to Home</a>
 
-    <div class="controls">
-        <input type="file" id="upload" accept="image/*">
-        <button id="basic-segmentation">Basic Segmentation</button>
-        <button id="advanced-segmentation">Advanced Segmentation</button>
-    </div>
+  <h1>Simple Image Segmentation</h1>
 
-    <div class="canvas-container">
-        <canvas id="canvas"></canvas>
-    </div>
+  <input type="file" id="imageInput" accept="image/*">
+  <button id="segmentBtn">Segment Image</button>
+  <br>
+  <canvas id="canvas"></canvas>
 
-    
-    
-    <script src="Segment.js"></script>
-   
+  <!-- Link to your segmentation script -->
+  <script src="segment.js"></script>
 </body>
 </html>

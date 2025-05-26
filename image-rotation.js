@@ -3,6 +3,16 @@ const ctx = canvas.getContext('2d');
 const input = document.getElementById('real-file');
 const rotateBtn = document.getElementById('rotate-btn');
 const angleInput = document.getElementById('angle-input');
+const downloadBtn = document.getElementById('download-btn');
+
+downloadBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'rotated-image.png'; // filename
+    link.href = canvas.toDataURL('image/png'); // image data
+    link.click();
+});
+
+
 
 let image = new Image();
 let rotationAngle = 0;
@@ -27,7 +37,6 @@ input.addEventListener('change', function (event) {
     }
 });
 
-// Function to draw the image with the current rotation
 function drawImageRotated() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();

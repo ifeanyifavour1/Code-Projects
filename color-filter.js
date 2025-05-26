@@ -61,6 +61,16 @@ function applyColorFilter(imageData, type) {
       data[i + 2] = newBlue;
     }
   }
+  const downloadBtn = document.getElementById('download-btn');
+
+downloadBtn.addEventListener('click', () => {
+  const imageURL = canvas.toDataURL('image/png');
+  const link = document.createElement('a');
+  link.href = imageURL;
+  link.download = 'filtered-image.png';
+  link.click();
+});
+
 
   return imageData;
 }

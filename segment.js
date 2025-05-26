@@ -1,58 +1,109 @@
+const imageInput = document.getElementById('imageInput');
+const segmentBtn = document.getElementById('segmentBtn');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-let originalImage = null;
+let img = new Image();
 
-document.getElementById('upload').addEventListener('change', function(e) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        originalImage = new Image();
-        originalImage.onload = function() {
-            canvas.width = originalImage.width;
-            canvas.height = originalImage.height;
-            ctx.drawImage(originalImage, 0, 0);
-        };
-        originalImage.src = event.target.result;
-    };
-    reader.readAsDataURL(e.target.files[0]);
+// Load the image into the canvas when selected
+imageInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  img = new Image();
+  img.onload = () => {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+  };
+  img.src = URL.createObjectURL(file);
 });
 
-document.getElementById('basic-segmentation').addEventListener('click', function() {
-    if (!originalImage) return alert('Please upload an image first');
-    
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    grayscale(imageData.data);
-    detectEdgesInPlace(imageData);
-    ctx.putImageData(imageData, 0, 0);
+// On button click, binarize + highlight shapes
+segmentBtn.addEventListener('click', () => {
+  ctx.drawImage(img, 0, 0);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  binarize(imageData);
+  ctx.putImageData(imageData, 0, 0);
+  highlightShapes(imageData);
 });
 
-function grayscale(data) {
-    for (let i = 0; i < data.length; i += 4) {
-        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-        data[i] = data[i + 1] = data[i + 2] = avg;
-    }
+// Convert to black/white, dark shapes → white pixels
+function binarize(imageData) {
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const gray = (data[i] + data[i+1] + data[i+2]) / 3;
+    // Dark shapes become white (255), background black (0)
+    const value = gray < 200 ? 255 : 0;
+    data[i] = data[i+1] = data[i+2] = value;
+  }
 }
 
-function detectEdgesInPlace(imageData) {
-    const data = imageData.data;
-    const width = canvas.width;
-    const height = canvas.height;
+// BFS-based flood-fill to find connected white blobs
+function highlightShapes(imageData) {
+  const { width, height, data } = imageData;
+  const visited = new Uint8Array(width * height);
+  const boxes = [];
 
-    for (let y = 1; y < height - 1; y++) {
-        for (let x = 1; x < width - 1; x++) {
-            const i = (y * width + x) * 4;
-            const left = ((y * width) + (x - 1)) * 4;
-            const right = ((y * width) + (x + 1)) * 4;
-            const top = (((y - 1) * width) + x) * 4;
-            const bottom = (((y + 1) * width) + x) * 4;
+  function idx(x, y) {
+    return y * width + x;
+  }
 
-            const gx = data[left] - data[right];
-            const gy = data[top] - data[bottom];
-            const gradient = Math.abs(gx) + Math.abs(gy);
+  const dirs = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1]
+  ];
 
-            const edge = gradient > 50 ? 255 : 0;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = idx(x, y);
+      if (visited[i] || data[i*4] === 0) continue;
 
-            data[i] = data[i + 1] = data[i + 2] = edge;
-            
+      // --- BFS starts here ---
+      const queue = [[x, y]];
+      visited[i] = 1;
+      let minX = x, maxX = x, minY = y, maxY = y, area = 0;
+
+      while (queue.length) {
+        const [cx, cy] = queue.shift();  // FIFO → BFS
+        area++;
+        minX = Math.min(minX, cx);
+        maxX = Math.max(maxX, cx);
+        minY = Math.min(minY, cy);
+        maxY = Math.max(maxY, cy);
+
+        for (const [dx, dy] of dirs) {
+          const nx = cx + dx, ny = cy + dy;
+          if (
+            nx >= 0 && nx < width &&
+            ny >= 0 && ny < height
+          ) {
+            const ni = idx(nx, ny);
+            if (!visited[ni] && data[ni*4] === 255) {
+              visited[ni] = 1;
+              queue.push([nx, ny]);
+            }
+          }
         }
+      }
+      // --- BFS ends here ---
+
+      // ignore tiny noise blobs
+      if (area > 100) {
+        boxes.push({
+          x: minX,
+          y: minY,
+          w: maxX - minX + 1,
+          h: maxY - minY + 1
+        });
+      }
     }
+  }
+
+  // Draw red bounding boxes
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 2;
+  for (const b of boxes) {
+    ctx.strokeRect(b.x, b.y, b.w, b.h);
+  }
 }

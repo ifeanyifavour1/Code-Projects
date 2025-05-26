@@ -87,6 +87,20 @@ body {
     width: 100%;
     margin: 10px 0 20px;
 }
+#download-btn {
+     padding: 15px 25px;
+    background-color: #f72585;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #f72585;
+    font-weight: bold;
+    width: 100%;
+    margin: 10px 0 20px;
+}
+
 
 #rotate-btn:hover {
     background-color: #b5179e;

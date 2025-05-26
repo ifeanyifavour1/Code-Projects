@@ -89,3 +89,24 @@ canvas {
   box-shadow: 0 0 25px #00ffff;
   border-radius: 15px;
 }
+#download-btn {
+  margin-top: 15px;
+  padding: 12px 25px;
+  background-color: #2a2a40;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #66fcf1;
+  transition: background 0.3s, color 0.3s, transform 0.3s ease;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+}
+
+#download-btn:hover {
+  background-color: #00ffff;
+  color: black;
+  transform: translateY(-3px);
+}

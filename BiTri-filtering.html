@@ -2,37 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bilinear & Trilinear Filtering</title>
   <link rel="stylesheet" href="BiTri-filtering.css" />
 </head>
 <body>
-
   <div class="container">
     <h1>Bilinear & Trilinear Filtering</h1>
 
+
+    <!-- Only the Upload control remains inside -->
     <div class="upload-section">
       <label for="image-upload" class="btn-upload">Upload Image</label>
       <input type="file" id="image-upload" accept="image/*" hidden />
     </div>
 
+    <!-- Canvases -->
     <div class="flex-container">
       <figure class="canvas-figure">
-        <figcaption class="canvas-label">Original Image (Pick Source Points)</figcaption>
+        <figcaption class="canvas-label">
+          Original Image (pick 3 source points)
+        </figcaption>
         <canvas id="original-canvas" width="400" height="300"></canvas>
       </figure>
 
       <figure class="canvas-figure">
-        <figcaption class="canvas-label">Result Image (Pick Destination Points)</figcaption>
+        <figcaption class="canvas-label">
+          Result Image (pick 3 dest points)
+        </figcaption>
         <canvas id="result-canvas" width="400" height="300"></canvas>
       </figure>
     </div>
-
-    <div class="buttons-section">
-      <button id="btn-bilinear" class="btn-action">Apply Bilinear Filtering (Enlarge)</button>
-      <button id="btn-trilinear" class="btn-action">Apply Trilinear Filtering (Shrink)</button>
-    </div>
   </div>
 
+  <!-- Action Buttons Bar (outside the container) -->
+  <div class="action-buttons">
+    <button id="btn-bilinear"  class="btn-action">Apply Bilinear (Enlarge)</button>
+    <button id="btn-trilinear" class="btn-action">Apply Trilinear (Shrink)</button>
+    <button id="btn-clear"     class="btn-action">Clear Points</button>
+    <button id="btn-download"  class="btn-action">Download Result</button>
+  </div>
+
+
+  <script src="BiTri-filtering.js"></script>
 </body>
 </html>

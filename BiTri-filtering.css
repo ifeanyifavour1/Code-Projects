@@ -10,10 +10,11 @@ body {
   background: #1e1e2f;
   color: #e0e0e0;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;       /* stack container + actions bar */
+  align-items: center;
   min-height: 100vh;
   padding: 40px 20px;
+  gap: 30px;                    /* space between container & actions */
 }
 
 .container {
@@ -35,6 +36,7 @@ h1 {
   user-select: none;
 }
 
+/* Upload section centered */
 .upload-section {
   text-align: center;
   margin-bottom: 35px;
@@ -62,7 +64,6 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  margin-bottom: 40px;
   flex-wrap: wrap;
 }
 
@@ -95,12 +96,12 @@ canvas:hover {
   border-color: #76b5c5;
 }
 
-.buttons-section {
-  text-align: center;
+/* Action Buttons Section */
+.action-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 .btn-action {
@@ -115,7 +116,6 @@ canvas:hover {
   box-shadow: 0 4px 14px rgba(240, 127, 63, 0.6);
   transition: background 0.3s ease, box-shadow 0.3s ease;
   user-select: none;
-  min-width: 220px;
 }
 
 .btn-action:hover {
@@ -129,12 +129,11 @@ canvas:hover {
     flex-direction: column;
     gap: 35px;
   }
-
   .canvas-figure {
     flex: 1 1 100%;
   }
-
-  .btn-action {
-    min-width: 100%;
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
   }
 }
