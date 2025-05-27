@@ -1,127 +1,121 @@
-const imageInput = document.getElementById('imageInput');
-const segmentBtn = document.getElementById('segmentBtn');
-const thresholdInput = document.getElementById('thresholdInput');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+// Get HTML elements by ID
+const imageInput    = document.getElementById('imageInput');
+const segmentBtn    = document.getElementById('segmentBtn');
+const thresholdInput= document.getElementById('thresholdInput');
+const downloadBtn   = document.getElementById('downloadBtn');
+const canvas        = document.getElementById('canvas');
+const ctx           = canvas.getContext('2d');
 let img = new Image();
 
-// Load the image when selected
+// Load the selected image and draw it on the canvas
 imageInput.addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
+
   img = new Image();
   img.onload = () => {
-    canvas.width = img.width;
+    canvas.width  = img.width;
     canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0); // draw image to canvas
   };
-  img.src = URL.createObjectURL(file);
+  img.src = URL.createObjectURL(file); // create image URL from file
 });
 
 segmentBtn.addEventListener('click', () => {
-  // Get user input threshold, fallback to 200 if invalid
-  let threshold = Number(thresholdInput.value);
-  if (isNaN(threshold) || threshold < 0 || threshold > 255) {
-    threshold = 200;
+  // 1. Read raw input (string) and trim whitespace
+  const rawInput = thresholdInput.value.trim();
+
+  // 2. Decide on threshold:
+  //    - if user typed nothing → default (200)
+  //    - else try to parse and validate
+  let threshold = 200;  // default
+  if (rawInput !== '') {
+    const num = Number(rawInput);
+    if (!isNaN(num) && num >= 0 && num <= 255) {
+      threshold = num;
+    } else {
+      // invalid number → notify and keep default
+      alert('Threshold must be between 0 and 255. Using default 200.');
+    }
   }
 
+  // Redraw the original image to clear any prior edits
   ctx.drawImage(img, 0, 0);
+
+  // Get pixel data
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  // Binarize and highlight
   binarize(imageData, threshold);
   ctx.putImageData(imageData, 0, 0);
   highlightShapes(imageData);
 });
 
+// Converts image to black & white based on threshold
 function binarize(imageData, threshold) {
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
-    const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
-    const value = gray > threshold ? 255 : 0; // Updated logic using threshold
+    const gray  = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    const value = gray > threshold ? 255 : 0;
     data[i] = data[i + 1] = data[i + 2] = value;
   }
 }
 
+// Finds connected white regions, draws a red box around each
 function highlightShapes(imageData) {
   const { width, height, data } = imageData;
   const visited = new Uint8Array(width * height);
-  const boundingBoxes = [];
+  const boxes = [];
 
-  function getIndex(x, y) {
-    return y * width + x;
-  }
-
-  const directions = [
-    [1, 0], // right
-    [-1, 0], // left
-    [0, 1], // down
-    [0, -1], // up
-  ];
+  function idx(x, y) { return y * width + x; }
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      const pixelIndex = getIndex(x, y);
-      if (visited[pixelIndex] || data[pixelIndex * 4] === 0) continue;
+      const i = idx(x,y);
+      if (visited[i] || data[i*4] === 0) continue;
 
-      const queue = [[x, y]];
-      visited[pixelIndex] = 1;
+      // BFS queue
+      const queue = [[x,y]];
+      visited[i] = 1;
 
-      let leftMostX = x;
-      let rightMostX = x;
-      let topMostY = y;
-      let bottomMostY = y;
-      let area = 0;
-
-      while (queue.length > 0) {
-        const [currentX, currentY] = queue.shift();
+      let left=x, right=x, top=y, bottom=y, area=0;
+      while (queue.length) {
+        const [cx, cy] = queue.shift();
         area++;
+        left   = Math.min(left,   cx);
+        right  = Math.max(right,  cx);
+        top    = Math.min(top,    cy);
+        bottom = Math.max(bottom, cy);
 
-        if (currentX < leftMostX) leftMostX = currentX;
-        if (currentX > rightMostX) rightMostX = currentX;
-        if (currentY < topMostY) topMostY = currentY;
-        if (currentY > bottomMostY) bottomMostY = currentY;
-
-        for (const [dx, dy] of directions) {
-          const neighborX = currentX + dx;
-          const neighborY = currentY + dy;
-
-          if (
-            neighborX >= 0 &&
-            neighborX < width &&
-            neighborY >= 0 &&
-            neighborY < height
-          ) {
-            const neighborIndex = getIndex(neighborX, neighborY);
-            if (!visited[neighborIndex] && data[neighborIndex * 4] === 255) {
-              visited[neighborIndex] = 1;
-              queue.push([neighborX, neighborY]);
+        for (const [dx, dy] of dirs) {
+          const nx = cx+dx, ny = cy+dy;
+          if (nx>=0 && nx<width && ny>=0 && ny<height) {
+            const ni = idx(nx,ny);
+            if (!visited[ni] && data[ni*4] === 255) {
+              visited[ni] = 1;
+              queue.push([nx,ny]);
             }
           }
         }
       }
 
+      // Only draw boxes around reasonably large areas
       if (area > 100) {
-        boundingBoxes.push({
-          x: leftMostX,
-          y: topMostY,
-          width: rightMostX - leftMostX + 1,
-          height: bottomMostY - topMostY + 1,
-        });
+        boxes.push({ x: left, y: top, width: right-left+1, height: bottom-top+1 });
       }
     }
   }
 
   ctx.strokeStyle = 'red';
-  ctx.lineWidth = 2;
-  for (const box of boundingBoxes) {
-    ctx.strokeRect(box.x, box.y, box.width, box.height);
-  }
-  onst downloadBtn = document.getElementById('downloadBtn');
+  ctx.lineWidth   = 2;
+  boxes.forEach(b => ctx.strokeRect(b.x, b.y, b.width, b.height));
+}
 
+// Download canvas as PNG when button clicked
 downloadBtn.addEventListener('click', () => {
-  
   const link = document.createElement('a');
   link.download = 'segmented-image.png';
-  link.href = canvas.toDataURL('image/png');
+  link.href     = canvas.toDataURL('image/png');
   link.click();
 });
-}
