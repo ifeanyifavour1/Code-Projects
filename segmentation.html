@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Image Segmentation</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    canvas {
-      border: 1px solid #333;
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="Segment.css" />
 </head>
 <body>
-
   <h1>Simple Image Segmentation</h1>
 
-  <input type="file" id="imageInput" accept="image/*">
+  <input type="file" id="imageInput" accept="image/*" />
+  <br /><br />
+
+  <!-- Input for segmentation threshold -->
+  <input
+    type="number"
+    id="thresholdInput"
+    placeholder="Enter segmentation threshold (0-255)"
+    min="0"
+    max="255"
+    style="width: 220px; padding: 5px"
+  />
+  <br /><br />
+
   <button id="segmentBtn">Segment Image</button>
-  <br>
+  <button id="downloadBtn">Download Result</button>
+
+  <br /><br />
   <canvas id="canvas"></canvas>
 
   <!-- Link to your segmentation script -->

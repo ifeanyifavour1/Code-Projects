@@ -26,7 +26,6 @@ function applyFilter(type) {
   ctx.putImageData(filtered, 0, 0);
 }
 
-// Your algorithm preserved:
 function applyColorFilter(imageData, type) {
   const data = imageData.data;
 
@@ -61,16 +60,32 @@ function applyColorFilter(imageData, type) {
       data[i + 2] = newBlue;
     }
   }
+else if (type === "invert") {
+  for (let i = 0; i < data.length; i += 4) {
+    const oldRed = data[i];
+    const oldGreen = data[i + 1];
+    const oldBlue = data[i + 2];
+
+    const newRed = 255 - oldRed;       
+    const newGreen = 255 - oldGreen;   
+    const newBlue = 255 - oldBlue;     
+
+    data[i] = newRed;       
+    data[i + 1] = newGreen; 
+    data[i + 2] = newBlue; 
+   
+  }
+}
+
+
   const downloadBtn = document.getElementById('download-btn');
-
-downloadBtn.addEventListener('click', () => {
-  const imageURL = canvas.toDataURL('image/png');
-  const link = document.createElement('a');
-  link.href = imageURL;
-  link.download = 'filtered-image.png';
-  link.click();
-});
-
+  downloadBtn.addEventListener('click', () => {
+    const imageURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = imageURL;
+    link.download = 'filtered-image.png';
+    link.click();
+  });
 
   return imageData;
 }

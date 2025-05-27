@@ -1,54 +1,68 @@
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-const input = document.getElementById('real-file');
-const rotateBtn = document.getElementById('rotate-btn');
-const angleInput = document.getElementById('angle-input');
+const canvas      = document.getElementById('myCanvas');
+const ctx         = canvas.getContext('2d');
+const input       = document.getElementById('real-file');
+const rotateBtn   = document.getElementById('rotate-btn');
+const angleInput  = document.getElementById('angle-input');
 const downloadBtn = document.getElementById('download-btn');
 
+let image         = new Image();
+let rotationAngle = 0; // in degrees
+
+// Download current canvas as PNG
 downloadBtn.addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'rotated-image.png'; // filename
-    link.href = canvas.toDataURL('image/png'); // image data
-    link.click();
+  const link = document.createElement('a');
+  link.download = 'rotated-image.png';
+  link.href     = canvas.toDataURL('image/png');
+  link.click();
 });
-
-
-
-let image = new Image();
-let rotationAngle = 0;
 
 // Handle image upload
-input.addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-        image.src = e.target.result;
-
-        image.onload = function () {
-            canvas.width = image.width;
-            canvas.height = image.height;
-            drawImageRotated();
-        };
+input.addEventListener('change', event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    image.src = e.target.result;
+    image.onload = () => {
+      rotationAngle = 0;
+      // initialize canvas to image’s natural size
+      canvas.width  = image.width;
+      canvas.height = image.height;
+      drawImageRotated();
     };
-
-    if (file) {
-        reader.readAsDataURL(file);
-    }
+  };
+  reader.readAsDataURL(file);
 });
 
+// Draw (and resize) for the current rotationAngle
 function drawImageRotated() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(rotationAngle * Math.PI / 180);
+  const rad = rotationAngle * Math.PI / 180;
+
+  const sin = Math.abs(Math.sin(rad));
+  const cos = Math.abs(Math.cos(rad));
+  const newW = image.width  * cos + image.height * sin;
+  const newH = image.width  * sin + image.height * cos;
+
+  canvas.width  = newW;
+  canvas.height = newH;
+
+  ctx.clearRect(0, 0, newW, newH);
+  ctx.save();
+    ctx.translate(newW / 2, newH / 2);
+    ctx.rotate(rad);
     ctx.drawImage(image, -image.width / 2, -image.height / 2);
-    ctx.restore();
+  ctx.restore();
+
 }
 
-// Handle button click to rotate
+// Handle rotate clicks
 rotateBtn.addEventListener('click', () => {
-    const angle = parseInt(angleInput.value) || 0;
-    rotationAngle += angle;
-    drawImageRotated();
+  const a = parseFloat(angleInput.value);
+  if (isNaN(a)) {
+    alert('Enter a valid number!');
+    return;
+  }
+  // accumulate angle, keep within [0,360)
+  rotationAngle = (rotationAngle + a) % 360;
+  drawImageRotated();
 });

@@ -1,10 +1,11 @@
 const imageInput = document.getElementById('imageInput');
 const segmentBtn = document.getElementById('segmentBtn');
+const thresholdInput = document.getElementById('thresholdInput');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 let img = new Image();
 
-// Load the image into the canvas when selected
+// Load the image when selected
 imageInput.addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -17,93 +18,110 @@ imageInput.addEventListener('change', e => {
   img.src = URL.createObjectURL(file);
 });
 
-// On button click, binarize + highlight shapes
 segmentBtn.addEventListener('click', () => {
+  // Get user input threshold, fallback to 200 if invalid
+  let threshold = Number(thresholdInput.value);
+  if (isNaN(threshold) || threshold < 0 || threshold > 255) {
+    threshold = 200;
+  }
+
   ctx.drawImage(img, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  binarize(imageData);
+  binarize(imageData, threshold);
   ctx.putImageData(imageData, 0, 0);
   highlightShapes(imageData);
 });
 
-// Convert to black/white, dark shapes → white pixels
-function binarize(imageData) {
+function binarize(imageData, threshold) {
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
-    const gray = (data[i] + data[i+1] + data[i+2]) / 3;
-    // Dark shapes become white (255), background black (0)
-    const value = gray < 200 ? 255 : 0;
-    data[i] = data[i+1] = data[i+2] = value;
+    const gray = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    const value = gray > threshold ? 255 : 0; // Updated logic using threshold
+    data[i] = data[i + 1] = data[i + 2] = value;
   }
 }
 
-// BFS-based flood-fill to find connected white blobs
 function highlightShapes(imageData) {
   const { width, height, data } = imageData;
   const visited = new Uint8Array(width * height);
-  const boxes = [];
+  const boundingBoxes = [];
 
-  function idx(x, y) {
+  function getIndex(x, y) {
     return y * width + x;
   }
 
-  const dirs = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1]
+  const directions = [
+    [1, 0], // right
+    [-1, 0], // left
+    [0, 1], // down
+    [0, -1], // up
   ];
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      const i = idx(x, y);
-      if (visited[i] || data[i*4] === 0) continue;
+      const pixelIndex = getIndex(x, y);
+      if (visited[pixelIndex] || data[pixelIndex * 4] === 0) continue;
 
-      // --- BFS starts here ---
       const queue = [[x, y]];
-      visited[i] = 1;
-      let minX = x, maxX = x, minY = y, maxY = y, area = 0;
+      visited[pixelIndex] = 1;
 
-      while (queue.length) {
-        const [cx, cy] = queue.shift();  // FIFO → BFS
+      let leftMostX = x;
+      let rightMostX = x;
+      let topMostY = y;
+      let bottomMostY = y;
+      let area = 0;
+
+      while (queue.length > 0) {
+        const [currentX, currentY] = queue.shift();
         area++;
-        minX = Math.min(minX, cx);
-        maxX = Math.max(maxX, cx);
-        minY = Math.min(minY, cy);
-        maxY = Math.max(maxY, cy);
 
-        for (const [dx, dy] of dirs) {
-          const nx = cx + dx, ny = cy + dy;
+        if (currentX < leftMostX) leftMostX = currentX;
+        if (currentX > rightMostX) rightMostX = currentX;
+        if (currentY < topMostY) topMostY = currentY;
+        if (currentY > bottomMostY) bottomMostY = currentY;
+
+        for (const [dx, dy] of directions) {
+          const neighborX = currentX + dx;
+          const neighborY = currentY + dy;
+
           if (
-            nx >= 0 && nx < width &&
-            ny >= 0 && ny < height
+            neighborX >= 0 &&
+            neighborX < width &&
+            neighborY >= 0 &&
+            neighborY < height
           ) {
-            const ni = idx(nx, ny);
-            if (!visited[ni] && data[ni*4] === 255) {
-              visited[ni] = 1;
-              queue.push([nx, ny]);
+            const neighborIndex = getIndex(neighborX, neighborY);
+            if (!visited[neighborIndex] && data[neighborIndex * 4] === 255) {
+              visited[neighborIndex] = 1;
+              queue.push([neighborX, neighborY]);
             }
           }
         }
       }
-      // --- BFS ends here ---
 
-      // ignore tiny noise blobs
       if (area > 100) {
-        boxes.push({
-          x: minX,
-          y: minY,
-          w: maxX - minX + 1,
-          h: maxY - minY + 1
+        boundingBoxes.push({
+          x: leftMostX,
+          y: topMostY,
+          width: rightMostX - leftMostX + 1,
+          height: bottomMostY - topMostY + 1,
         });
       }
     }
   }
 
-  // Draw red bounding boxes
   ctx.strokeStyle = 'red';
   ctx.lineWidth = 2;
-  for (const b of boxes) {
-    ctx.strokeRect(b.x, b.y, b.w, b.h);
+  for (const box of boundingBoxes) {
+    ctx.strokeRect(box.x, box.y, box.width, box.height);
   }
+  onst downloadBtn = document.getElementById('downloadBtn');
+
+downloadBtn.addEventListener('click', () => {
+  
+  const link = document.createElement('a');
+  link.download = 'segmented-image.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
 }
