@@ -1,10 +1,50 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
   text-align: center;
-  margin-top: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 40px;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+input[type="file"],
+input[type="number"] {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 260px;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
 }
 
 canvas {
-  border: 2px solid #333;
-  margin-top: 10px;
+  display: block;
+  margin: 30px auto;
+  max-width: 90%;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

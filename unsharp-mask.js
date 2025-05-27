@@ -64,7 +64,7 @@ applyBtn.addEventListener("click", function() {
 
   // Apply unsharp masking formula to each pixel
   for (let i = 0; i < originalData.data.length; i += 4) {
-    // For each RGB channel (skip alpha)
+    // For each RGB channel 
     originalData.data[i] = clamp(originalData.data[i] + amount * (originalData.data[i] - blurredData.data[i]));
     originalData.data[i + 1] = clamp(originalData.data[i + 1] + amount * (originalData.data[i + 1] - blurredData.data[i + 1]));
     originalData.data[i + 2] = clamp(originalData.data[i + 2] + amount * (originalData.data[i + 2] - blurredData.data[i + 2]));
